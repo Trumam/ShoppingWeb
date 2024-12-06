@@ -1,0 +1,40 @@
+server:
+  port:8080
+
+spring:
+  #邮箱基本配置
+  mail:
+    #配置smtp服务主机地址
+    # qq邮箱为smtp.qq.com          端口号465或587
+    # sina    smtp.sina.cn
+    # aliyun  smtp.aliyun.com
+    # 163     smtp.163.com       端口号465或994
+    host: smtp.qq.com
+    #发送者邮箱
+    username: 3257996995@qq.com
+    #配置密码,注意不是真正的密码，而是刚刚申请到的授权码
+    password: beudgzrlbbqhchcc
+    #端口号465或587
+    port: 465
+    #默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    #其他参数
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          ssl:
+            #本地测试，先放开ssl
+            enable: true
+            required: true
+          #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
+
+  datasource:
+    diver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 118218
+    url: jdbc:mysql://localhost:3306/shoppingweb?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=false&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.shoppingweb.entity

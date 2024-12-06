@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//0TD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shoppingweb.dao.GoodDao">
+
+
+    <select id= "findBySearch" resultType="com.shoppingweb.entity.Goods">
+        select * from goods
+        <where>
+            <if test="params != null and params.name != null and params.name !=''">
+                and name like concat('%',#{params.name}, '%')
+            </if>
+            <if test="params != null and params.category != null and params.category !=''">
+                and category like concat('%',#{params.category}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="addGoods" parameterType="com.shoppingweb.entity.Goods">
+        INSERT INTO goods (name, picture, price,`describe`,category) VALUES (#{name},#{picture},#{price},#{describe},#{category});
+    </insert>
+
+    <update id="editGoods" parameterType="com.shoppingweb.entity.Goods">
+        UPDATE goods SET name=#{name},picture=#{picture},price=#{price},`describe`=#{describe},category=#{category} where id=#{id};
+    </update>
+
+    <delete id="delGoods" parameterType="java.lang.Integer">
+        delete from goods where id = #{id};
+    </delete>
+
+</mapper>

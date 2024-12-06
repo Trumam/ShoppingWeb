@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//0TD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shoppingweb.dao.OrderDao">
+
+    <insert id="add" parameterType="com.shoppingweb.entity.Order">
+        INSERT INTO cusorder (cus_account, goods_id, address_id, order_date,goods_number,is_paid,is_shipped,is_received,is_completed)
+        VALUES (#{cus_account},#{goods_id},#{address_id},#{order_date},#{goods_number},#{is_paid},#{is_shipped},#{is_received},#{is_completed});
+    </insert>
+
+    <update id="edit" parameterType="com.shoppingweb.entity.Order">
+        UPDATE cusorder
+        SET address_id=#{address_id},goods_number=#{goods_number},is_paid=#{is_paid},is_shipped=#{is_shipped},is_received=#{is_received},is_completed=#{is_completed}
+        where order_id=#{order_id};
+    </update>
+    <update id="update" parameterType="com.shoppingweb.entity.Order">
+        UPDATE cusorder
+        SET is_paid=#{is_paid}
+        where order_id=#{order_id};
+    </update>
+    <update id="updatepaid" parameterType="com.shoppingweb.entity.Order">
+        UPDATE cusorder SET is_paid = #{is_paid} WHERE order_id = #{order_id};
+    </update>
+    <update id="updateship" parameterType="com.shoppingweb.entity.Order">
+        UPDATE cusorder SET is_shipped = #{is_shipped} WHERE order_id = #{order_id};
+    </update>
+    <update id="updatereceived" parameterType="com.shoppingweb.entity.Order">
+        UPDATE cusorder SET is_received = #{is_received} WHERE order_id = #{order_id};
+    </update>
+    <update id="updatecompleted" parameterType="com.shoppingweb.entity.Order">
+        UPDATE cusorder SET is_completed = #{is_completed} WHERE order_id = #{order_id};
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from cusorder where order_id = #{order_id};
+    </delete>
+
+    <select id= "findBySearch" resultType="com.shoppingweb.entity.Order">
+        select * from cusorder
+        <where>
+            <if test="params != null and params.cusAccount != null and params.cusAccount !=''">
+                and cus_account like concat('%',#{params.cusAccount}, '%')
+            </if>
+            <if test="params != null and params.goodsName != null and params.goodsName !=''">
+                and goods_id like concat('%',#{params.goodsName}, '%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id= "selectAllInfo" resultType="com.shoppingweb.entity.Order">
+        SELECT o.order_id, o.cus_account, o.goods_id, o.address_id, o.order_date, o.goods_number, o.is_paid, o.is_shipped, o.is_received, o.is_completed,
+        a.recipient_name, a.phone_number, a.detailed_address, g.name as goods_name, g.price as goods_price
+        FROM cusorder o
+        JOIN address a ON o.address_id = a.address_id
+        JOIN goods g ON o.goods_id = g.id
+        WHERE o.cus_account = #{cusaccount};
+    </select>
+</mapper>

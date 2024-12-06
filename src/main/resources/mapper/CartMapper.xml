@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//0TD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shoppingweb.dao.CartDao">
+    <insert id="add" parameterType="com.shoppingweb.entity.GoodsInCart">
+        INSERT INTO shopcart (cusaccount, goodsid, goodsnumber) VALUES (#{cusaccount},#{goodsid},#{goodsnumber});
+    </insert>
+
+    <select id="selectByAccount" parameterType="com.shoppingweb.entity.GoodsInCart">
+        select shopcart.*,goods.picture as goodsPicture, goods.name as goodsName,goods.price as price
+        from shopcart
+        left join goods on goods.id =shopcart.goodsid
+        where cusaccount = #{cusaccount}
+    </select>
+
+    <update id="updataNumber" parameterType="com.shoppingweb.entity.GoodsInCart">
+        UPDATE shopcart SET goodsnumber = goodsnumber + #{goodsnumber} where goodsid = #{goodsid} and cusaccount = #{cusaccount};
+    </update>
+
+    <update id="updateNumberInCart" parameterType="com.shoppingweb.entity.GoodsInCart">
+        UPDATE shopcart SET goodsnumber = #{goodsnumber} where goodsid = #{goodsid} and cusaccount = #{cusaccount};
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from shopcart where id = #{id};
+    </delete>
+
+</mapper>

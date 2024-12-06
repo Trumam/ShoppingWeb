@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//0TD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shoppingweb.dao.LogDao">
+    <insert id="add" parameterType="com.shoppingweb.entity.Log">
+        INSERT INTO log (cus_account, goods_id, log_date, behavior_type,goods_num)
+        VALUES (#{cus_account},#{goods_id},#{log_date},#{behavior_type},#{goods_num});
+    </insert>
+</mapper>

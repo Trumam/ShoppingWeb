@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//0TD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shoppingweb.dao.RepDao">
+
+<!--    <select id="getMonthlySalesByYear" resultMap="MonthlySalesResultMap">-->
+<!--        SELECT-->
+<!--        DATE_FORMAT(order_date, '%Y-%m') AS month,-->
+<!--        SUM(goods_number) AS totalSales-->
+<!--        FROM-->
+<!--        cusorder-->
+<!--        WHERE-->
+<!--        YEAR(order_date) = #{year}-->
+<!--        GROUP BY-->
+<!--        DATE_FORMAT(order_date, '%Y-%m')-->
+<!--    </select>-->
+
+<!--    <resultMap id="MonthlySalesResultMap" type="com.shoppingweb.entity.SalesReport">-->
+<!--        <result property="month" column="month"/>-->
+<!--        <result property="totalSales" column="totalSales"/>-->
+<!--    </resultMap>-->
+
+    <select id="getSalesMoneyByRange" resultMap="SalesMoneyMap">
+        SELECT
+        DATE_FORMAT(c.order_date, '%Y-%m') AS month,
+        SUM(c.goods_number * g.price) AS totalSales
+        FROM
+        cusorder c
+        JOIN goods g ON c.goods_id = g.id
+        WHERE
+        c.order_date BETWEEN #{begin} AND #{end}
+        GROUP BY
+        DATE_FORMAT(c.order_date, '%Y-%m');
+    </select>
+
+    <resultMap id="SalesMoneyMap" type="com.shoppingweb.entity.SalesReport">
+        <result property="month" column="month"/>
+        <result property="totalSales" column="totalSales"/>
+    </resultMap>
+
+
+    <select id="getSalesNumByRange" resultMap="SalesNumMap">
+        SELECT
+        DATE_FORMAT(order_date, '%Y-%m') AS month,
+        SUM(goods_number) AS totalNum
+        FROM
+        cusorder
+        WHERE
+        order_date BETWEEN #{begin} AND #{end}
+        GROUP BY
+        DATE_FORMAT(order_date, '%Y-%m');
+    </select>
+
+    <resultMap id="SalesNumMap" type="com.shoppingweb.entity.SalesReport">
+        <result property="month" column="month"/>
+        <result property="totalNum" column="totalNum"/>
+    </resultMap>
+
+
+    <select id="getTopByRange" resultMap="RangeSalesNumMap">
+        SELECT
+        g.name AS goodsName,
+        SUM(c.goods_number) AS goodsNum
+        FROM
+        cusorder c
+        JOIN goods g ON c.goods_id = g.id
+        WHERE
+        c.order_date BETWEEN #{begin} AND #{end}
+        GROUP BY
+        g.id
+        ORDER BY
+        goodsNum DESC
+        LIMIT 3;
+    </select>
+
+    <resultMap id="RangeSalesNumMap" type="com.shoppingweb.entity.SalesReport">
+        <result property="goodsName" column="goodsName"/>
+        <result property="goodsNum" column="goodsNum"/>
+    </resultMap>
+
+
+
+</mapper>
